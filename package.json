@@ -1,0 +1,27 @@
+{
+  "name": "reactnd-redux-todos-goals",
+  "version": "0.1.0",
+  "description": "First Redux app",
+  "main": "index.js",
+  "scripts": {
+    "install-prettier": "npm i -D prettier eslint-config-prettier eslint-plugin-prettier",
+    "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/james-priest/reactnd-redux-todos-goals.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/james-priest/reactnd-redux-todos-goals/issues"
+  },
+  "homepage": "https://github.com/james-priest/reactnd-redux-todos-goals#readme",
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.16.4"
+  }
+}
