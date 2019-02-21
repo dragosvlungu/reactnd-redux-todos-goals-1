@@ -4,6 +4,7 @@
   "description": "First Redux app",
   "main": "index.js",
   "scripts": {
+    "install-eslint": "npm i -D eslint eslint-plugin-react eslint-plugin-jsx-a11y",
     "install-prettier": "npm i -D prettier eslint-config-prettier eslint-plugin-prettier",
     "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -21,7 +22,9 @@
   "devDependencies": {
     "eslint": "^5.14.1",
     "eslint-config-prettier": "^4.0.0",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-react": "^7.12.4",
     "prettier": "^1.16.4"
   }
 }
