@@ -10,7 +10,7 @@ function createStore() {
   // The store should have four parts
   // 1. The state
   // 2. Get the state
-  // 3. Listen to changes on the state
+  // 3. Listen for changes on the state
   // 4. Update the state
 
   let state;
@@ -25,6 +25,11 @@ function createStore() {
     };
   };
 
+  const dispatch = action => {
+    state = todos(state, action);
+    listeners.forEach(listener => listener());
+  };
+
   return {
     getState,
     subscribe
@@ -32,12 +37,19 @@ function createStore() {
 }
 
 // Example code
-// const store = createStore();
-// store.subscribe(() => {
-//   console.log('The new state is: ', store.getState());
-// })
-// const unsubscribe = store.subscribe(() => {
-//   console.log('The store changed');
-// })
+const store = createStore();
+store.subscribe(() => {
+  console.log('The new state is: ', store.getState());
+});
+const unsubscribe = store.subscribe(() => {
+  console.log('The store changed');
+});
 
+var a = todos(store.getState(), {
+  type: 'ADD_TODO',
+  todo: { id: 0, name: 'Learn Redux', complete: false }
+});
+
+// store.getState();
+console.log(a);
 // unsubscribe();
