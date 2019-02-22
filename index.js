@@ -1,12 +1,5 @@
-function todos(state = [], action) {
-  if (action.type === 'ADD_TODO') {
-    return state.concat([action.todo]);
-  }
-
-  return state;
-}
-
-function createStore() {
+// Library code
+function createStore(reducer) {
   // The store should have four parts
   // 1. The state
   // 2. Get the state
@@ -26,18 +19,29 @@ function createStore() {
   };
 
   const dispatch = action => {
-    state = todos(state, action);
+    state = reducer(state, action);
     listeners.forEach(listener => listener());
   };
 
   return {
     getState,
-    subscribe
+    subscribe,
+    dispatch
   };
 }
 
+// App code
+function todos(state = [], action) {
+  if (action.type === 'ADD_TODO') {
+    return state.concat([action.todo]);
+  }
+
+  return state;
+}
+
 // Example code
-const store = createStore();
+const store = createStore(todos);
+
 store.subscribe(() => {
   console.log('The new state is: ', store.getState());
 });
