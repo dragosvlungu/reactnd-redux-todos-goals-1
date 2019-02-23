@@ -32,11 +32,20 @@ function createStore(reducer) {
 
 // App code (reducer)
 function todos(state = [], action) {
-  if (action.type === 'ADD_TODO') {
-    return state.concat([action.todo]);
+  switch (action.type) {
+    case 'ADD_TODO':
+      return state.concat([action.todo]);
+    case 'REMOVE_TODO':
+      return state.filter(todo => todo.id !== action.id);
+    case 'TOGGLE_TODO':
+      return state.map(todo =>
+        todo.id !== action.id
+          ? todo
+          : Object.assign({}, todo, { complete: !todo.complete })
+      );
+    default:
+      return state;
   }
-
-  return state;
 }
 
 // Create the store
@@ -55,6 +64,14 @@ store.dispatch({
 store.dispatch({
   type: 'ADD_TODO',
   todo: { id: 1, name: 'Learn Python', complete: true }
+});
+store.dispatch({
+  type: 'TOGGLE_TODO',
+  id: 0
+});
+store.dispatch({
+  type: 'REMOVE_TODO',
+  id: 0
 });
 
 const unsubscribe = store.subscribe(() => {
