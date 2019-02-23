@@ -30,7 +30,7 @@ function createStore(reducer) {
   };
 }
 
-// App code
+// App code (reducer)
 function todos(state = [], action) {
   if (action.type === 'ADD_TODO') {
     return state.concat([action.todo]);
@@ -39,21 +39,26 @@ function todos(state = [], action) {
   return state;
 }
 
-// Example code
+// Create the store
 const store = createStore(todos);
 
+// subscribe to the listener
 store.subscribe(() => {
   console.log('The new state is: ', store.getState());
 });
+
+// dispatch an action
+store.dispatch({
+  type: 'ADD_TODO',
+  todo: { id: 0, name: 'Learn Redux', complete: false }
+});
+store.dispatch({
+  type: 'ADD_TODO',
+  todo: { id: 1, name: 'Learn Python', complete: true }
+});
+
 const unsubscribe = store.subscribe(() => {
   console.log('The store changed');
 });
 
-var a = todos(store.getState(), {
-  type: 'ADD_TODO',
-  todo: { id: 0, name: 'Learn Redux', complete: false }
-});
-
-// store.getState();
-console.log(a);
 // unsubscribe();
