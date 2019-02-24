@@ -21,6 +21,7 @@ module.exports = {
   ],
   "plugins": [
     "react",
+    "html",
     "jsx-a11y",
     "prettier"
   ],
