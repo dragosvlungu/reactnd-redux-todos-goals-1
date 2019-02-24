@@ -51,7 +51,7 @@ function todos(state = [], action) {
 function goals(state = [], action) {
   switch (action.type) {
     case 'ADD_GOAL':
-      return state.concat([action.todo]);
+      return state.concat([action.goal]);
     case 'REMOVE_GOAL':
       return state.filter(goal => goal.id !== action.id);
     default:
@@ -59,8 +59,15 @@ function goals(state = [], action) {
   }
 }
 
+function app(state = {}, action) {
+  return {
+    todos: todos(state.todos, action),
+    goals: goals(state.goals, action)
+  };
+}
+
 // Create the store
-const store = createStore(todos);
+const store = createStore(app);
 
 // subscribe to the listener
 store.subscribe(() => {
@@ -70,11 +77,15 @@ store.subscribe(() => {
 // dispatch an action
 store.dispatch({
   type: 'ADD_TODO',
-  todo: { id: 0, name: 'Learn Redux', complete: false }
+  todo: { id: 0, name: 'Wash the car', complete: false }
 });
 store.dispatch({
   type: 'ADD_TODO',
-  todo: { id: 1, name: 'Learn Python', complete: true }
+  todo: { id: 1, name: 'Walk the dog', complete: true }
+});
+store.dispatch({
+  type: 'ADD_TODO',
+  todo: { id: 2, name: 'Go to the gym', complete: true }
 });
 store.dispatch({
   type: 'TOGGLE_TODO',
@@ -82,6 +93,22 @@ store.dispatch({
 });
 store.dispatch({
   type: 'REMOVE_TODO',
+  id: 0
+});
+store.dispatch({
+  type: 'ADD_GOAL',
+  goal: { id: 0, name: 'Learn Redux' }
+});
+store.dispatch({
+  type: 'ADD_GOAL',
+  goal: { id: 1, name: 'Learn Python' }
+});
+store.dispatch({
+  type: 'ADD_GOAL',
+  goal: { id: 2, name: 'Learn Vue' }
+});
+store.dispatch({
+  type: 'REMOVE_GOAL',
   id: 0
 });
 
