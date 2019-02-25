@@ -1,5 +1,16 @@
 {
-  "eslint.validate": ["javascript", "javascriptreact", "html"],
+  // "eslint.validate": ["javascript", "javascriptreact", "html"],
+  // "javascript.format.enable": false,
+  // "eslint.autoFixOnSave": true,
+  "eslint.options": {
+    "extensions": [ ".html", ".js", ".vue", ".jsx" ]
+  },
+  "eslint.validate": [
+    { "language": "html", "autoFix": true },
+    { "language": "vue", "autoFix": true },
+    { "language": "javascript", "autoFix": true },
+    { "language": "javascriptreact", "autoFix": true }
+  ],
   "cSpell.words": [
     "todos"
   ]
