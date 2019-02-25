@@ -25,6 +25,10 @@ module.exports = {
     "jsx-a11y",
     "prettier"
   ],
+  // "settings": {
+  //   "html/html-extensions": [".html"]
+  //   // "html/indent": "+2",   // consider .html and .we files as HTML
+  // },
   "rules": {
     // "func-names": "off",
     // "linebreak-style": "off",
