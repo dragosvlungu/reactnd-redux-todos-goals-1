@@ -1,3 +1,5 @@
+[![Edit Redux Todo Goals App](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/42zkzvrn14?fontsize=14)
+
 # Redux Todo & Goals App
 
 This is a proof-of-concept Redux-like Todo app. It uses simple html and a store to provide the following:
