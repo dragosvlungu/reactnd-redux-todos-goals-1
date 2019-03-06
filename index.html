@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Udacity Todos Goals</title>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/redux/3.7.2/redux.min.js'></script>
   <style>
     body {
       font-family: sans-serif;
@@ -50,37 +51,6 @@
           .toString(36)
           .substr(2) + new Date().getTime().toString(36)
       );
-    }
-    // Library code
-    function createStore(reducer) {
-      // The store should have four parts
-      // 1. The state
-      // 2. Get the state
-      // 3. Listen for changes on the state
-      // 4. Update the state
-
-      let state;
-      let listeners = [];
-
-      const getState = () => state;
-
-      const subscribe = listener => {
-        listeners.push(listener);
-        return () => {
-          listeners = listeners.filter(l => l !== listener);
-        };
-      };
-
-      const dispatch = action => {
-        state = reducer(state, action);
-        listeners.forEach(listener => listener());
-      };
-
-      return {
-        getState,
-        subscribe,
-        dispatch
-      };
     }
 
     // App code
@@ -155,15 +125,12 @@
       }
     }
 
-    function app(state = {}, action) {
-      return {
-        todos: todos(state.todos, action),
-        goals: goals(state.goals, action)
-      };
-    }
-
     // Middleware
-    function checkAndDispatch(store, action) {
+    // function checker(store) {
+    //   return function(next) {
+    //     return function(action) {
+    const checker = store => next => action => {
+      // do work
       if (
         action.type === ADD_TODO &&
         action.todo.name.toLowerCase().includes('bitcoin')
@@ -177,12 +144,17 @@
       ) {
         return alert("Nope, that's a bad idea.");
       }
-
-      return store.dispatch(action);
-    }
+      return next(action);
+    };
 
     // Create the store
-    const store = createStore(app);
+    const store = Redux.createStore(
+      Redux.combineReducers({
+        todos,
+        goals
+      }),
+      Redux.applyMiddleware(checker)
+    );
 
     // subscribe to the listener
     store.subscribe(() => {
@@ -201,8 +173,7 @@
       e.preventDefault();
       const input = document.getElementById('todo');
       const name = input.value;
-      checkAndDispatch(
-        store,
+      store.dispatch(
         addTodoAction({
           name,
           complete: false,
@@ -216,8 +187,7 @@
       e.preventDefault();
       const input = document.getElementById('goal');
       const name = input.value;
-      checkAndDispatch(
-        store,
+      store.dispatch(
         addGoalAction({
           id: generateId(),
           name
@@ -243,7 +213,7 @@
       checkbox.id = todo.id;
       checkbox.setAttribute('type', 'checkbox');
       checkbox.addEventListener('click', () => {
-        checkAndDispatch(store, toggleTodoAction(todo.id));
+        store.dispatch(toggleTodoAction(todo.id));
       });
     
       const label = document.createElement('label');
@@ -258,7 +228,7 @@
       }
 
       const removeBtn = createRemoveButton(() => {
-        checkAndDispatch(store, removeTodoAction(todo.id));
+        store.dispatch(removeTodoAction(todo.id));
       });
       li.appendChild(removeBtn);
 
@@ -271,7 +241,7 @@
       node.appendChild(text);
 
       const removeBtn = createRemoveButton(() => {
-        checkAndDispatch(store, removeGoalAction(goal.id));
+        store.dispatch(removeGoalAction(goal.id));
       });
       node.appendChild(removeBtn);
 
