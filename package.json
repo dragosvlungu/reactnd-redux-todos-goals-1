@@ -4,7 +4,7 @@
   "description": "First Redux app",
   "main": "index.js",
   "scripts": {
-    "install-eslint": "npm i -D eslint eslint-plugin-react eslint-plugin-jsx-a11y",
+    "install-eslint": "npm i -D eslint eslint-plugin-react eslint-plugin-html eslint-plugin-jsx-a11y",
     "install-prettier": "npm i -D prettier eslint-config-prettier eslint-plugin-prettier",
     "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
     "test": "echo \"Error: no test specified\" && exit 1"
