@@ -125,15 +125,12 @@
       }
     }
 
-    // function app(state = {}, action) {
-    //   return {
-    //     todos: todos(state.todos, action),
-    //     goals: goals(state.goals, action)
-    //   };
-    // }
-
-    // Faux Middleware
-    function checkAndDispatch(store, action) {
+    // Middleware
+    // function checker(store) {
+    //   return function(next) {
+    //     return function(action) {
+    const checker = store => next => action => {
+      // do work
       if (
         action.type === ADD_TODO &&
         action.todo.name.toLowerCase().includes('bitcoin')
@@ -147,16 +144,16 @@
       ) {
         return alert("Nope, that's a bad idea.");
       }
-
-      return store.dispatch(action);
-    }
+      return next(action);
+    };
 
     // Create the store
     const store = Redux.createStore(
       Redux.combineReducers({
         todos,
         goals
-      })
+      }),
+      Redux.applyMiddleware(checker)
     );
 
     // subscribe to the listener
@@ -176,8 +173,7 @@
       e.preventDefault();
       const input = document.getElementById('todo');
       const name = input.value;
-      checkAndDispatch(
-        store,
+      store.dispatch(
         addTodoAction({
           name,
           complete: false,
@@ -191,8 +187,7 @@
       e.preventDefault();
       const input = document.getElementById('goal');
       const name = input.value;
-      checkAndDispatch(
-        store,
+      store.dispatch(
         addGoalAction({
           id: generateId(),
           name
@@ -218,7 +213,7 @@
       checkbox.id = todo.id;
       checkbox.setAttribute('type', 'checkbox');
       checkbox.addEventListener('click', () => {
-        checkAndDispatch(store, toggleTodoAction(todo.id));
+        store.dispatch(toggleTodoAction(todo.id));
       });
     
       const label = document.createElement('label');
@@ -233,7 +228,7 @@
       }
 
       const removeBtn = createRemoveButton(() => {
-        checkAndDispatch(store, removeTodoAction(todo.id));
+        store.dispatch(removeTodoAction(todo.id));
       });
       li.appendChild(removeBtn);
 
@@ -246,7 +241,7 @@
       node.appendChild(text);
 
       const removeBtn = createRemoveButton(() => {
-        checkAndDispatch(store, removeGoalAction(goal.id));
+        store.dispatch(removeGoalAction(goal.id));
       });
       node.appendChild(removeBtn);
 
