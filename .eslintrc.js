@@ -51,7 +51,8 @@ module.exports = {
       {
         "extensions": [
           ".js",
-          ".jsx"
+          ".jsx",
+          ".html"
         ]
       }
     ],
