@@ -25,6 +25,11 @@
     .removeBtn {
       margin-left: 10px;
     }
+    @media screen and (max-width: 400px) {
+      body {
+        display: block;
+      }
+    }
   </style>
 </head>
 <body>
@@ -67,28 +72,24 @@
         todo
       };
     }
-
     function removeTodoAction(id) {
       return {
         type: REMOVE_TODO,
         id
       };
     }
-
     function toggleTodoAction(id) {
       return {
         type: TOGGLE_TODO,
         id
       };
     }
-
     function addGoalAction(goal) {
       return {
         type: ADD_GOAL,
         goal
       };
     }
-
     function removeGoalAction(id) {
       return {
         type: REMOVE_GOAL,
@@ -113,7 +114,6 @@
           return state;
       }
     }
-
     function goals(state = [], action) {
       switch (action.type) {
         case ADD_GOAL:
@@ -125,10 +125,7 @@
       }
     }
 
-    // Middleware
-    // function checker(store) {
-    //   return function(next) {
-    //     return function(action) {
+    // Middleware ES6 pattern
     const checker = store => next => action => {
       // do work
       if (
@@ -147,13 +144,22 @@
       return next(action);
     };
 
+    const logger = store => next => action => {
+      console.group(action.type);
+      console.log('The action:', action);
+      const result = next(action);
+      console.log('The new state:', store.getState());
+      console.groupEnd();
+      return result;
+    };
+
     // Create the store
     const store = Redux.createStore(
       Redux.combineReducers({
         todos,
         goals
       }),
-      Redux.applyMiddleware(checker)
+      Redux.applyMiddleware(checker, logger)
     );
 
     // subscribe to the listener
