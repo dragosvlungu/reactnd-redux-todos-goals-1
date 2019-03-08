@@ -165,19 +165,19 @@
       return result;
     };
 
-    const goalAffirmation = store => next => action => {
-      if (action.type === ADD_GOAL) {
-        alert("That's a great goal!");
-      }
-      return next(action);
-    };
+    // const goalAffirmation = store => next => action => {
+    //   if (action.type === ADD_GOAL) {
+    //     alert("That's a great goal!");
+    //   }
+    //   return next(action);
+    // };
 
-    const reminder = state => next => action => {
-      if (action.type === ADD_TODO) {
-        action.todo.name = `Don't forget to ${action.todo.name}`;
-      }
-      return next(action);
-    };
+    // const reminder = state => next => action => {
+    //   if (action.type === ADD_TODO) {
+    //     action.todo.name = `Don't forget to ${action.todo.name}`;
+    //   }
+    //   return next(action);
+    // };
 
     // Create the store
     const store = Redux.createStore(
@@ -185,7 +185,7 @@
         todos,
         goals
       }),
-      Redux.applyMiddleware(checker, logger, goalAffirmation, reminder)
+      Redux.applyMiddleware(checker, logger)
     );
 
     // subscribe to the listener
@@ -291,10 +291,31 @@
     };
 
     class Todos extends React.Component {
+      addItem = e => {
+        e.preventDefault();
+        const name = this.input.value;
+        this.props.store.dispatch(
+          addTodoAction({
+            name,
+            complete: false,
+            id: generateId()
+          })
+        );
+        this.input.value = '';
+      };
       render() {
         return (
           <div>
-            Todos
+            <h1>Todo List</h1>
+            <form onSubmit={this.addItem}>
+              <input
+                type="text"
+                placeholder="Add Todo"
+                required
+                ref={input => (this.input = input)}
+              />
+              <button>Add Todo</button>
+            </form>
             <List />
           </div>
         );
@@ -316,14 +337,14 @@
       render() {
         return (
           <div className="row">
-            <Todos />
+            <Todos store={this.props.store} />
             <Goals />
           </div>
         );
       }
     }
 
-    ReactDOM.render(<App />, document.getElementById('app'));
+    ReactDOM.render(<App store={store} />, document.getElementById('app'));
   </script>
 </body>
 </html>
