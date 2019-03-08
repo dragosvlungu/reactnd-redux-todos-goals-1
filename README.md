@@ -1,4 +1,4 @@
-[![Edit Redux Todo Goals App](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/42zkzvrn14?fontsize=14)
+[![Edit React Redux Todo Goals App](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/v3k1xp8ql7?fontsize=14)
 
 # Redux Todo & Goals App
 
