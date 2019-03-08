@@ -4,6 +4,7 @@
   "description": "First Redux app",
   "main": "index.js",
   "scripts": {
+    "install-babel": "npm i -D @babel/core @babel/plugin-proposal-class-properties @babel/preset-env @babel/preset-react babel-eslint",
     "install-eslint": "npm i -D eslint eslint-plugin-react eslint-plugin-html eslint-plugin-jsx-a11y",
     "install-prettier": "npm i -D prettier eslint-config-prettier eslint-plugin-prettier",
     "eslint-check": "eslint --print-config . | eslint-config-prettier-check",
@@ -20,6 +21,11 @@
   },
   "homepage": "https://github.com/james-priest/reactnd-redux-todos-goals#readme",
   "devDependencies": {
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "babel-eslint": "^10.0.1",
     "eslint": "^5.14.1",
     "eslint-config-prettier": "^4.0.0",
     "eslint-plugin-html": "^5.0.3",
