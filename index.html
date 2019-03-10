@@ -129,6 +129,14 @@
           return state;
       }
     }
+    function loading(state = true, action) {
+      switch (action.type) {
+        case RECEIVE_DATA:
+          return false;
+        default:
+          return state;
+      }
+    }
 
     // Middleware ES6 pattern
     const checker = store => next => action => {
@@ -176,7 +184,8 @@
     const store = Redux.createStore(
       Redux.combineReducers({
         todos,
-        goals
+        goals,
+        loading
       }),
       Redux.applyMiddleware(checker, logger)
     );
@@ -310,15 +319,17 @@
 
         Promise.all([API.fetchTodos(), API.fetchGoals()])
           .then(([todos, goals]) => {
-            // console.log('Todos:', todos);
-            // console.log('Goals:', goals);
             store.dispatch(receiveDataAction(todos, goals));
           })
           .catch(err => console.log(err));
       }
       render() {
         const { store } = this.props;
-        const { todos, goals } = store.getState();
+        const { todos, goals, loading } = store.getState();
+
+        if (loading === true) {
+          return <h3>Loading...</h3>;
+        }
         return (
           <div className="row">
             <Todos todos={todos} store={this.props.store} />
