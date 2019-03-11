@@ -192,6 +192,9 @@
   </script>
 
   <script type="text/babel">
+    const connectionAlert = () => {
+      alert('Connection error occurred. Please try again.');
+    };
     const List = props => {
       return (
         <ol>
@@ -203,7 +206,8 @@
                     type="checkbox"
                     id={item.id}
                     onClick={() => props.toggle && props.toggle(item.id)}
-                    defaultChecked={item.complete ? 'checked' : ''}
+                    readOnly // required for uncontrolled component
+                    checked={item.complete ? 'checked' : ''}
                   />
                   <label
                     htmlFor={item.id}
@@ -250,12 +254,17 @@
         this.props.store.dispatch(removeTodoAction(todo.id));
 
         return API.deleteTodo(todo.id).catch(() => {
-          alert('Connection error occurred. Please try again.');
+          connectionAlert();
           this.props.store.dispatch(addTodoAction(todo));
         });
       };
       toggleItem = id => {
         this.props.store.dispatch(toggleTodoAction(id));
+
+        return API.saveTodoToggle(id).catch(() => {
+          connectionAlert();
+          this.props.store.dispatch(toggleTodoAction(id));
+        });
       };
       render() {
         return (
