@@ -192,7 +192,7 @@
   </script>
 
   <script type="text/babel">
-    const connectionAlert = () => {
+    const showConnectionError = () => {
       alert('Connection error occurred. Please try again.');
     };
     const List = props => {
@@ -240,21 +240,21 @@
     class Todos extends React.Component {
       addItem = e => {
         e.preventDefault();
-        const name = this.input.value;
-        this.props.store.dispatch(
-          addTodoAction({
-            name,
-            complete: false,
-            id: generateId()
+
+        return API.saveTodo(this.input.value)
+          .then(todo => {
+            this.props.store.dispatch(addTodoAction(todo));
+            this.input.value = '';
           })
-        );
-        this.input.value = '';
+          .catch(() => {
+            showConnectionError();
+          });
       };
       removeItem = todo => {
         this.props.store.dispatch(removeTodoAction(todo.id));
 
         return API.deleteTodo(todo.id).catch(() => {
-          connectionAlert();
+          showConnectionError();
           this.props.store.dispatch(addTodoAction(todo));
         });
       };
@@ -262,7 +262,7 @@
         this.props.store.dispatch(toggleTodoAction(id));
 
         return API.saveTodoToggle(id).catch(() => {
-          connectionAlert();
+          showConnectionError();
           this.props.store.dispatch(toggleTodoAction(id));
         });
       };
@@ -291,16 +291,17 @@
     }
 
     class Goals extends React.Component {
-      addGoal = e => {
+      addItem = e => {
         e.preventDefault();
-        const name = this.input.value;
-        this.props.store.dispatch(
-          addGoalAction({
-            name,
-            id: generateId()
+
+        return API.saveGoal(this.input.value)
+          .then(goal => {
+            this.props.store.dispatch(addGoalAction(goal));
+            this.input.value = '';
           })
-        );
-        this.input.value = '';
+          .catch(() => {
+            showConnectionError();
+          });
       };
       removeItem = goal => {
         this.props.store.dispatch(removeGoalAction(goal.id));
@@ -314,7 +315,7 @@
         return (
           <div>
             <h1>Goals</h1>
-            <form onSubmit={this.addGoal}>
+            <form onSubmit={this.addItem}>
               <input
                 id="goal"
                 type="text"
