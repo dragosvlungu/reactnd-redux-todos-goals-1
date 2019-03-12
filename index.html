@@ -104,9 +104,25 @@
 
         return API.deleteTodo(todo.id).catch(() => {
           showConnectionError();
-          this.props.store.dispatch(addTodoAction(todo));
+          dispatch(addTodoAction(todo));
         });
       };
+    }
+    const handleAddGoal = (name, callback) => dispatch => {
+      return API.saveGoal(name)
+        .then(goal => {
+          dispatch(addGoalAction(goal));
+          callback();
+        })
+        .catch(() => showConnectionError());
+    };
+    const handleDeleteGoal = goal => dispatch => {
+      dispatch(removeGoalAction(goal.id));
+
+      return API.deleteGoal(goal.id).catch(() => {
+        showConnectionError();
+        dispatch(addGoalAction(goal));
+      });
     }
 
     // Reducers
@@ -300,22 +316,12 @@
       addItem = e => {
         e.preventDefault();
 
-        return API.saveGoal(this.input.value)
-          .then(goal => {
-            this.props.store.dispatch(addGoalAction(goal));
-            this.input.value = '';
-          })
-          .catch(() => {
-            showConnectionError();
-          });
+        return this.props.store.dispatch(
+          handleAddGoal(this.input.value, () => (this.input.value = ''))
+        );
       };
       removeItem = goal => {
-        this.props.store.dispatch(removeGoalAction(goal.id));
-
-        return API.deleteGoal(goal.id).catch(() => {
-          alert('Connection error occurred. Please try again.');
-          this.props.store.dispatch(addGoalAction(goal));
-        });
+        this.props.store.dispatch(handleDeleteGoal(goal));
       };
       render() {
         return (
