@@ -98,6 +98,20 @@
         goals
       };
     }
+
+    // Thunk action creators
+    function handleAddTodo(name, callback) {
+      return dispatch => {
+        return API.saveTodo(name)
+          .then(todo => {
+            dispatch(addTodoAction(todo));
+            callback();
+          })
+          .catch(() => {
+            showConnectionError();
+          });
+      };
+    }
     function handleDeleteTodo(todo) {
       return dispatch => {
         dispatch(removeTodoAction(todo.id));
@@ -105,6 +119,16 @@
         return API.deleteTodo(todo.id).catch(() => {
           showConnectionError();
           dispatch(addTodoAction(todo));
+        });
+      };
+    }
+    function handleToggleTodo(id) {
+      return dispatch => {
+        dispatch(toggleTodoAction(id));
+
+        return API.saveTodoToggle(id).catch(() => {
+          showConnectionError();
+          dispatch(toggleTodoAction(id));
         });
       };
     }
@@ -123,7 +147,7 @@
         showConnectionError();
         dispatch(addGoalAction(goal));
       });
-    }
+    };
 
     // Reducers
     function todos(state = [], action) {
@@ -267,26 +291,15 @@
     class Todos extends React.Component {
       addItem = e => {
         e.preventDefault();
-
-        return API.saveTodo(this.input.value)
-          .then(todo => {
-            this.props.store.dispatch(addTodoAction(todo));
-            this.input.value = '';
-          })
-          .catch(() => {
-            showConnectionError();
-          });
+        this.props.store.dispatch(
+          handleAddTodo(this.input.value, () => (this.input.value = ''))
+        );
       };
       removeItem = todo => {
         this.props.store.dispatch(handleDeleteTodo(todo));
       };
       toggleItem = id => {
-        this.props.store.dispatch(toggleTodoAction(id));
-
-        return API.saveTodoToggle(id).catch(() => {
-          showConnectionError();
-          this.props.store.dispatch(toggleTodoAction(id));
-        });
+        this.props.store.dispatch(handleToggleTodo(id));
       };
       render() {
         return (
@@ -364,8 +377,8 @@
         }
         return (
           <div className="row">
-            <Todos todos={todos} store={this.props.store} />
-            <Goals goals={goals} store={this.props.store} />
+            <Todos todos={todos} store={store} />
+            <Goals goals={goals} store={store} />
           </div>
         );
       }
